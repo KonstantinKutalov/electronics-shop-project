@@ -1,4 +1,5 @@
 import csv
+import os
 
 
 class Item:
@@ -16,20 +17,21 @@ class Item:
         :param price: Цена за единицу товара.
         :param quantity: Количество товара в магазине.
         """
-        self._name = name
+        self.__name = name
         self.price = price
         self.quantity = quantity
+        Item.all.append(self)  # Добавлякм экземпляр в список all
 
     @property
     def name(self):
-        return self._name
+        return self.__name
 
     @name.setter
     def name(self, value):
         if len(value) > 10:
-            self._name = value[:10]
+            self.__name = value[:10]
         else:
-            self._name = value
+            self.__name = value
 
     def calculate_total_price(self) -> float:
         """
@@ -41,16 +43,17 @@ class Item:
 
     @classmethod
     def instantiate_from_csv(cls):
+        file_path = os.path.join(os.path.dirname(__file__), '../src/items.csv')
         """
         Инициализирует экземпляры класса Item данными из файла src/items.csv.
         """
-        with open('C:/Users/kutalov/Desktop/electronics-shop-project/src/items.csv', 'r') as file:
+        with open(file_path, 'r') as file:
             reader = csv.DictReader(file)
             for row in reader:
-                name = row['name']
+                __name = row['name'][:10]
                 price = float(row['price'])
                 quantity = int(row['quantity'])
-                item = cls(name, price, quantity)
+                item = cls(__name, price, quantity)
                 cls.all.append(item)
 
     @staticmethod
@@ -62,4 +65,3 @@ class Item:
         :return: Число.
         """
         return float(string)
-
