@@ -65,3 +65,21 @@ class Item:
         :return: Число.
         """
         return float(string)
+
+    def __repr__(self):
+        """
+        Возвращает описание экземплора класса.
+        """
+        return f"Item('{self.name}', {self.price}, {self.quantity})"
+
+    def __str__(self):
+        """
+        Возвращает строковое предоставление экземпляра класса.
+            """
+        return self.name
+
+
+if __name__ == '__main__':
+    item1 = Item("Смартфон", 10000, 20)
+    assert repr(item1) == "Item('Смартфон', 10000, 20)"
+    assert str(item1) == 'Смартфон'
