@@ -34,6 +34,14 @@ class TestItem(unittest.TestCase):
             self.assertIsInstance(item.price, float)
             self.assertIsInstance(item.quantity, int)
 
+    def test_repr(self):
+        item = Item('Smartphone', 1000, 5)
+        self.assertEqual(repr(item), "Item('Smartphone', 1000, 5)")
+
+    def test_str(self):
+        item = Item('Smartphone', 1000, 5)
+        self.assertEqual(str(item), 'Smartphone')
+
 
 if __name__ == '__main__':
     unittest.main()
