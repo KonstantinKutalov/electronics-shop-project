@@ -1,5 +1,6 @@
 import unittest
 from src.item import Item
+from src.phone import Phone
 
 
 class TestItem(unittest.TestCase):
@@ -41,6 +42,24 @@ class TestItem(unittest.TestCase):
     def test_str(self):
         item = Item('Smartphone', 1000, 5)
         self.assertEqual(str(item), 'Smartphone')
+# Новые
+
+    # Работает
+    def test_phone_number_of_sim(self):
+        phone = Phone("iPhone 14", 120_000, 5, 2)
+        self.assertEqual(phone.number_of_sim, 2)
+    # ?
+
+    def test_add_phone_and_item(self):
+        phone = Phone("iPhone 14", 120000, 5, 2)
+        item = Item("Смартфон", 10000, 20)
+
+        try:
+            result = phone + item
+        except TypeError as e:
+            self.assertIsInstance(e, TypeError)
+        else:
+            self.fail("Ошибка TypeError не возникла")
 
 
 if __name__ == '__main__':
