@@ -8,6 +8,7 @@ packages = [{include = "electronics_shop_project"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
+keyboard = "^0.13.5"
 
 
 [build-system]
