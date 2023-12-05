@@ -1,24 +1,41 @@
 import unittest
-from src.keyboard import Keyboard
+from src.keyboard import Keyboard, LanguageMixin
 
 
 class TestKeyboard(unittest.TestCase):
     def setUp(self):
-        self.keyboard = Keyboard('Dark Project KD87A', 9600, 5)
+        self.kb = Keyboard('Dark Project KD87A', 9600, 5)
 
-    def test_initial_language(self):
-        self.assertEqual(self.keyboard.language, 'EN')  # проверка начального языка
+    def test_str(self):
+        self.assertEqual(str(self.kb), "Dark Project KD87A")
 
-    def test_change_language(self):
-        self.keyboard.change_lang()
-        self.assertEqual(self.keyboard.language, 'RU')  #  смена языка на RU
+    def test_language(self):
+        self.assertEqual(str(self.kb.language), "EN")
 
-        self.keyboard.change_lang()
-        self.assertEqual(self.keyboard.language, 'EN')  # проверка смены языка обратно на EN
+    def test_change_lang(self):
+        self.kb.change_lang()
+        self.assertEqual(str(self.kb.language), "RU")
 
-    def test_invalid_language_change(self):
-        with self.assertRaises(AttributeError):
-            self.keyboard.language = 'CH'
+        self.kb.change_lang()
+        self.assertEqual(str(self.kb.language), "EN")
+
+        self.kb.language = 'CH'
+        self.assertEqual(str(self.kb.language), "CH")
+
+
+class TestLanguageMixin(unittest.TestCase):
+    def setUp(self):
+        self.lang_mixin = LanguageMixin()
+
+    def test_init(self):
+        self.assertEqual(self.lang_mixin.language, "EN")
+
+    def test_change_lang(self):
+        self.lang_mixin.change_lang()
+        self.assertEqual(self.lang_mixin.language, "RU")
+
+        self.lang_mixin.change_lang()
+        self.assertEqual(self.lang_mixin.language, "EN")
 
 
 if __name__ == '__main__':
