@@ -1,9 +1,35 @@
 import unittest
-from src.item import Item
+from unittest.mock import patch, MagicMock
+from src.item import Item, InstantiateCSVError
 from src.phone import Phone
 
 
 class TestItem(unittest.TestCase):
+    @patch('src.item.os.path.join')
+    @patch('src.item.os.path.isfile')
+    @patch('src.item.csv.DictReader')
+    def test_instantiate_from_csv_file_not_found(self, mock_dict_reader, mock_isfile, mock_join):
+        mock_join.side_effect = lambda *args: '/path/to/items.csv'  # Путь к файлу
+        mock_isfile.return_value = False  # Файл не существует
+
+        with self.assertRaises(FileNotFoundError) as context:
+            Item.instantiate_from_csv()
+
+        self.assertEqual(str(context.exception), "Отсутствует файл items.csv")
+
+    @patch('src.item.os.path.join')
+    @patch('src.item.os.path.isfile')
+    @patch('src.item.csv.DictReader')
+    def test_instantiate_from_csv_file_corrupted(self, mock_dict_reader, mock_isfile, mock_join):
+        mock_join.side_effect = lambda *args: '../src/items.csv'  # Путь к файлу
+        mock_isfile.return_value = True  # Файл есть
+        mock_dict_reader.return_value = MagicMock(fieldnames=['name', 'price'])  # Поврежденный файл
+
+        with self.assertRaises(InstantiateCSVError) as context:
+            Item.instantiate_from_csv()
+
+        self.assertEqual(str(context.exception), "Файл item.csv поврежден")
+
     @classmethod
     def setUpClass(cls):
         Item.instantiate_from_csv()
